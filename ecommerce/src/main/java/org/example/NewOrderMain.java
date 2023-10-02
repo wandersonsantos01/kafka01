@@ -1,5 +1,6 @@
 package org.example;
 
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -13,15 +14,24 @@ public class NewOrderMain {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         var producer = new KafkaProducer<String, String>(properties());
+
         String value = "123,432,113322";
         var record = new ProducerRecord<String, String>("ecommerce_new_order", value, value);
-        producer.send(record, (data, exeption) -> {
+        producer.send(record, getCallback()).get();
+
+        var email = "Thanks! Your order is processing";
+        var emailRecord = new ProducerRecord<String, String>("ecommerce_email_new_order", email, email);
+        producer.send(emailRecord, getCallback()).get();
+    }
+
+    private static Callback getCallback() {
+        return (data, exeption) -> {
             if (exeption != null) {
                 exeption.printStackTrace();
                 return;
             }
             System.out.println("Success - topic " + data.topic() + "::: partition " + data.partition() + "/ offset " + data.offset() + "/ timestamp" + data.timestamp());
-        }).get();
+        };
     }
 
     private static Properties properties() {
