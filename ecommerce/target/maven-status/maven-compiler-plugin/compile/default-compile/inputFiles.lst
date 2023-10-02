@@ -1,2 +1,3 @@
-/var/www/kafka/courses/kafka01/ecommerce/ecommerce/src/main/java/org/example/NewOrderMain.java
-/var/www/kafka/courses/kafka01/ecommerce/ecommerce/src/main/java/org/example/Main.java
+/var/www/kafka/courses/kafka01/ecommerce/src/main/java/org/example/NewOrderMain.java
+/var/www/kafka/courses/kafka01/ecommerce/src/main/java/org/example/FraudDetector.java
+/var/www/kafka/courses/kafka01/ecommerce/src/main/java/org/example/Main.java
