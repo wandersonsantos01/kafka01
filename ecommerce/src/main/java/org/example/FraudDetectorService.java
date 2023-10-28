@@ -7,13 +7,14 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class FraudDetectorService {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         var consumer = new KafkaConsumer<String, String>(properties());
-        consumer.subscribe(Collections.singletonList("ecommerce_new_order"));
+        consumer.subscribe(Collections.singletonList("ecommerce_new_order_2"));
         while (true) {
             var records = consumer.poll(Duration.ofMillis(100));
             if (!records.isEmpty()) {
@@ -26,6 +27,7 @@ public class FraudDetectorService {
                     System.out.println("offset ::: " + record.offset());
                     Thread.sleep(5000);
                     System.out.println("Order checked");
+                    System.out.println("===============================================================");
                 }
             }
 
@@ -38,6 +40,7 @@ public class FraudDetectorService {
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, FraudDetectorService.class.getSimpleName());
+        properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, FraudDetectorService.class.getSimpleName() + "_" + UUID.randomUUID().toString());
         return properties;
     }
 

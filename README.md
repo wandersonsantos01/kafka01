@@ -41,3 +41,8 @@ Show topics:
 bin/kafka-topics.sh --list --bootstrap-server localhost:9092
 ```
 
+Describe groups:
+```shell
+bin/kafka-consumer-groups.sh --all-groups --bootstrap-server localhost:9092 --describe
+```
+

@@ -8,6 +8,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class NewOrderMain {
@@ -15,13 +16,16 @@ public class NewOrderMain {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         var producer = new KafkaProducer<String, String>(properties());
 
-        String value = "123,432,113322";
-        var record = new ProducerRecord<String, String>("ecommerce_new_order", value, value);
-        producer.send(record, getCallback()).get();
+        for (var idx = 0; idx < 100; idx++) {
+            String key = UUID.randomUUID().toString();
+            String value = key + ",432,113322";
+            var record = new ProducerRecord<String, String>("ecommerce_new_order_2", key, value);
+            producer.send(record, getCallback()).get();
 
-        var email = "Thanks! Your order is processing";
-        var emailRecord = new ProducerRecord<String, String>("ecommerce_email_new_order", email, email);
-        producer.send(emailRecord, getCallback()).get();
+            var email = "Thanks! Your order is processing";
+            var emailRecord = new ProducerRecord<String, String>("ecommerce_email_new_order_2", key, email);
+            producer.send(emailRecord, getCallback()).get();
+        }
     }
 
     private static Callback getCallback() {

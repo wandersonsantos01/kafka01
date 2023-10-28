@@ -13,7 +13,7 @@ public class EmailNewOrderService {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         var consumer = new KafkaConsumer<String, String>(properties());
-        consumer.subscribe(Collections.singletonList("ecommerce_email_new_order"));
+        consumer.subscribe(Collections.singletonList("ecommerce_email_new_order_2"));
         while (true) {
             var records = consumer.poll(Duration.ofMillis(100));
             if (!records.isEmpty()) {
@@ -26,6 +26,7 @@ public class EmailNewOrderService {
                     System.out.println("offset ::: " + record.offset());
                     Thread.sleep(1000);
                     System.out.println("Order checked");
+                    System.out.println("========================================================");
                 }
             }
 
