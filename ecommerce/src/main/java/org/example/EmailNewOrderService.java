@@ -2,16 +2,19 @@ package org.example;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import java.io.IOException;
+
 public class EmailNewOrderService {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         EmailNewOrderService emailNewOrderService = new EmailNewOrderService();
-        KafkaService kafkaService = new KafkaService(
+        try (KafkaService kafkaService = new KafkaService(
                 EmailNewOrderService.class.getSimpleName(),
                 "ecommerce_email_new_order_2",
                 emailNewOrderService::parse
-        );
-        kafkaService.run();
+        )) {
+            kafkaService.run();
+        }
     }
 
     private void parse(ConsumerRecord<String, String> record) throws InterruptedException {

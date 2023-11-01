@@ -2,16 +2,19 @@ package org.example;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
+import java.io.IOException;
+
 public class FraudDetectorService {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         FraudDetectorService fraudDetectorService = new FraudDetectorService();
-        KafkaService kafkaService = new KafkaService(
+        try(KafkaService kafkaService = new KafkaService(
                 FraudDetectorService.class.getSimpleName(),
                 "ecommerce_new_order_2",
                 fraudDetectorService::parse
-        );
-        kafkaService.run();
+        )) {
+            kafkaService.run();
+        }
     }
 
     private void parse(ConsumerRecord<String, String> record) throws InterruptedException {
