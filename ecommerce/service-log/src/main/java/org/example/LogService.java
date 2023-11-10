@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class LogService {
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException, IOException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         LogService logService = new LogService();
         try (KafkaService<String> kafkaService = new KafkaService<>(
                 logService.getClass().getSimpleName(),
