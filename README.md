@@ -40,6 +40,10 @@ Show topics:
 ```shell
 bin/kafka-topics.sh --list --bootstrap-server localhost:9092
 ```
+Delete topic:
+```shell
+bin/kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic ecommerce_email_new_order
+```
 
 Describe groups:
 ```shell

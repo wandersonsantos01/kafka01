@@ -3,15 +3,18 @@ package org.example;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class EmailNewOrderService {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         EmailNewOrderService emailNewOrderService = new EmailNewOrderService();
-        try (KafkaService kafkaService = new KafkaService(
+        try (KafkaService<String> kafkaService = new KafkaService<>(
                 EmailNewOrderService.class.getSimpleName(),
                 "ecommerce_email_new_order_2",
-                emailNewOrderService::parse
+                emailNewOrderService::parse,
+                String.class,
+                new HashMap<>()
         )) {
             kafkaService.run();
         }

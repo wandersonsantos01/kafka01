@@ -1,18 +1,24 @@
 package org.example;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 public class LogService {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException, IOException {
         LogService logService = new LogService();
-        try (KafkaService kafkaService = new KafkaService(
+        try (KafkaService<String> kafkaService = new KafkaService<>(
                 logService.getClass().getSimpleName(),
-                "ecommerce.*",
-                logService::parse
+                Pattern.compile("ecommerce.*"),
+                logService::parse,
+                String.class,
+                Map.of(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName())
         )) {
             kafkaService.run();
         }
