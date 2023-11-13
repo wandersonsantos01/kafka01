@@ -11,7 +11,7 @@ public class EmailNewOrderService {
         EmailNewOrderService emailNewOrderService = new EmailNewOrderService();
         try (KafkaService<String> kafkaService = new KafkaService<>(
                 EmailNewOrderService.class.getSimpleName(),
-                "ecommerce_email_new_order_2",
+                "ecommerce_email_new_order",
                 emailNewOrderService::parse,
                 String.class,
                 new HashMap<>()
