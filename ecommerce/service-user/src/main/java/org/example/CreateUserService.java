@@ -1,6 +1,7 @@
 package org.example;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.sqlite.SQLiteException;
 
 import java.io.IOException;
 import java.sql.*;
@@ -13,10 +14,14 @@ public class CreateUserService {
     public CreateUserService() throws SQLException {
         String url = "jdbc:sqlite:ecommerce/service-user/target/user_database.db";
         this.connection = DriverManager.getConnection(url);
-        connection.createStatement().execute("CREATE TABLE users (" +
+        try {
+            connection.createStatement().execute("CREATE TABLE users (" +
                     "uuid VARCHAR(200) PRIMARY KEY," +
                     "email VARCHAR(200)" +
-                ")");
+                    ")");
+        } catch (SQLiteException e) {
+            // e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws IOException, SQLException {
@@ -38,18 +43,19 @@ public class CreateUserService {
 
         Order order = record.value();
         if (isNewUser(order.getEmail())) {
-            insertNewUser(order.getEmail());
+            System.out.println(order);
+            insertNewUser(order.getUserId(), order.getEmail());
         }
 
         System.out.println("===============================================================");
     }
 
-    private void insertNewUser(String email) throws SQLException {
+    private void insertNewUser(String uuid, String email) throws SQLException {
         PreparedStatement insert = connection.prepareStatement("INSERT INTO users " +
                 "(uuid, email) " +
                 "VALUES " +
                 "(?, ?)");
-        insert.setString(1, "uuid");
+        insert.setString(1, uuid);
         insert.setString(2, email);
         insert.execute();
         System.out.println("User UUID e email " + email + " inserted");
