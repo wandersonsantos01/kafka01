@@ -6,6 +6,7 @@ import org.sqlite.SQLiteException;
 import java.io.IOException;
 import java.sql.*;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class CreateUserService {
 
@@ -44,18 +45,18 @@ public class CreateUserService {
         Order order = record.value();
         if (isNewUser(order.getEmail())) {
             System.out.println(order);
-            insertNewUser(order.getUserId(), order.getEmail());
+            insertNewUser(order.getEmail());
         }
 
         System.out.println("===============================================================");
     }
 
-    private void insertNewUser(String uuid, String email) throws SQLException {
+    private void insertNewUser(String email) throws SQLException {
         PreparedStatement insert = connection.prepareStatement("INSERT INTO users " +
                 "(uuid, email) " +
                 "VALUES " +
                 "(?, ?)");
-        insert.setString(1, uuid);
+        insert.setString(1, UUID.randomUUID().toString());
         insert.setString(2, email);
         insert.execute();
         System.out.println("User UUID e email " + email + " inserted");

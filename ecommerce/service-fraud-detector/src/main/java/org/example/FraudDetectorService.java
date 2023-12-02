@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 public class FraudDetectorService {
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) throws IOException {
         FraudDetectorService fraudDetectorService = new FraudDetectorService();
         try(KafkaService<Order> kafkaService = new KafkaService<>(
                 FraudDetectorService.class.getSimpleName(),
@@ -37,14 +37,14 @@ public class FraudDetectorService {
             System.out.println("Order is a fraud !!!" + order);
             orderKafkaDispatcher.send(
                     "ecommerce_order_rejected",
-                    order.getUserId(),
+                    order.getEmail(),
                     order
             );
         } else {
             System.out.println("Order checked");
             orderKafkaDispatcher.send(
                     "ecommerce_order_accepted",
-                    order.getUserId(),
+                    order.getEmail(),
                     order
             );
         }
